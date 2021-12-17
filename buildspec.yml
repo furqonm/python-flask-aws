@@ -12,7 +12,7 @@ phases:
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG  
       - echo "Execute the Docker image..."
-      - docker run -p 80:80 -d simple-website-pythonflask
+      - docker run -p 80:80 -d $IMAGE_REPO_NAME:$IMAGE_TAG
       - echo "Test the Docker container..."
       - curl -v --silent localhost --stderr - | grep -Fq $TEST
   post_build:
