@@ -12,9 +12,9 @@ phases:
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG  
       - echo "Execute the Docker image on `date`"
       - docker run -p 8888:8888 --name flask_container -d $IMAGE_REPO_NAME:$IMAGE_TAG  
-      - sleep 5s
+      - sleep 10s
       - echo "Testing the Docker container on `date`"
-      - docker exec -ti flask_container curl "localhost" > output.html
+      - docker exec -it flask_container curl "http://localhost" > output.html
       - TESTING_OUTPUT=$(grep -ci $TESTING_PARAMETER output.html)
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1 ; else echo "Testing SUCCESSFULLY on `date`" ; fi
   post_build:
