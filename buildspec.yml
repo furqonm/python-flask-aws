@@ -3,21 +3,20 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Logging in to Amazon ECR..."
+      - echo "1. Logging in to Amazon ECR on `date`"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - echo "Building the Docker image on `date`"
+      - echo "2. Building the Docker image on `date`"
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG  
-      - echo "Execute the Docker image on `date`"
-      - docker run -p 8888:8888 --name flask_container -d $IMAGE_REPO_NAME:$IMAGE_TAG  
-      - sleep 10s
-      - echo "Testing the Docker container on `date`"
-      - docker exec -it flask_container curl "http://localhost" > output.html
-      - TESTING_OUTPUT=$(grep -ci $TESTING_PARAMETER output.html)
-      - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1 ; else echo "Testing SUCCESSFULLY on `date`" ; fi
+      - echo "3. Execute the Docker image on `date`"
+      - docker run -p 8888:8888 --name flask_container -d $IMAGE_REPO_NAME:$IMAGE_TAG
+      - sleep 5s
+      - echo "4. Testing the Docker container on `date`"
+      - TESTING_OUTPUT=$(docker exec -i flask_container curl "http://localhost" | grep -ci "$TESTING_PARAMETER")
+      - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1 ; else echo "5. Testing SUCCESSFULLY on `date`" ; fi
   post_build:
     commands:
-      - echo "Pushing the Docker image on `date`"
+      - echo "6. Pushing the Docker image on `date`"
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
