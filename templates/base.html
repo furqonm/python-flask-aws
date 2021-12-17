@@ -2,13 +2,14 @@
 <head>
   <title>AWS Training - Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="images/favicon.png">
+  <link rel="icon" href="static/favicon.png">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
   <style>.img, .col-lg-7 {margin-left: 17px;} td {padding: 8px;}</style>    
 </head>
+
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <img src="images/trainocate.svg" height="40" alt="Trainocate">
+  <img src="static/trainocate.svg" height="40" alt="Trainocate">
   <div class="collapse navbar-collapse" id="navbarText" style="position: absolute; right: 10;">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
@@ -23,18 +24,19 @@
     </ul>
   </div>
 </nav>
-
 <br/>
+
 <h5 style="text-align:center;">
     Please follow these step to begin {% block training %}{% endblock %}
 </h5>
+
 <div class="col-lg-10">
   <hr/>
   <h5>1. Register your attendance</h5>
 </div>
 <div class="row">
   <div class="col-lg-3">
-    <p><img src="images/register.jpg" class="img rounded"/></p>
+    <p><img src="static/register.jpg" class="img rounded"/></p>
   </div>
   <div class="col-lg-7">
     <p>Please provide your information for the attendance. Feel free to use your personal or business email.</p>
@@ -50,11 +52,9 @@
           </tr>
         </table>
       </fieldset>
-
       <input type="hidden" name="fvv" value="1">
       <input type="hidden" name="fbzx" value="-6914561864626509750">
       <input type="hidden" name="pageHistory" value="0">
-
       <input type="submit" value="Submit" class="btn btn-warning" role="button" aria-pressed="true" target="_blank">
     </form>
   </div>
@@ -66,7 +66,7 @@
 </div>
 <div class="row">
   <div class="col-lg-3">
-    <p><img src="images/ebook.jpg" class="img rounded"/></p>
+    <p><img src="static/ebook.jpg" class="img rounded"/></p>
   </div>
   <div class="col-lg-7" >
     <p>Modul and hands-on lab guides are provided via Evantage Bookshelf. Please register yourself if you don't have the Evantage account.</p>
@@ -79,6 +79,26 @@
     </ul>
   </div>
 </div>
-{% block lab %}{% endblock %}
+{% if lab == true %}
+<div class="col-lg-10">
+  <hr/>
+  <h5>3. Hands-On Labs</h5>
+</div>
+<div class="row" >
+  <div class="col-lg-3">
+    <p><img src="static/lab.jpg" class="img rounded"/></p>
+  </div>
+  <div class="col-lg-7">
+    <p>There are several labs we could explore to grasp how to use AWS services. Before the practice, please register yourself if you don't have a qwikLABS account.</p>
+    <p><a href="https://id-globalknowledge-jp.qwiklabs.com" target="_blank" class="btn btn-warning" role="button" aria-pressed="true">Access qwikLABS</a></p>
+    Notes:
+    <ul>
+      <li>Use your email address in step 1 to create an account.</li>
+      <li>We will inform you when the lab started.</li>
+      <li>You can only start once for each lab.</li>
+    </ul>
+  </div>
+</div>
+{% endif %}
 </body>
 </html>
