@@ -11,10 +11,10 @@ phases:
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG  
       - echo "Execute the Docker image on `date`"
-      - docker run -p 80:80 -d $IMAGE_REPO_NAME:$IMAGE_TAG
-      - sleep 10s
+      - docker run -p 8888:8888 -d $IMAGE_REPO_NAME:$IMAGE_TAG
+      - sleep 15s
       - echo "Testing the Docker container on `date`"
-      - curl -f --connect-timeout 10 http://localhost:80/ > output.html
+      - curl http://localhost:8888/ > output.html
       - TESTING_OUTPUT=$(grep -ci $TESTING_PARAMETER output.html)
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1 ; else echo "Testing SUCCESSFULLY on `date`" ; fi
   post_build:
