@@ -3,4 +3,5 @@ WORKDIR /project
 ADD . /project
 RUN apk --no-cache add curl && \
     pip install -r requirements.txt
-CMD ["python","app.py"]
+ENTRYPOINT ["python","app.py"]
+CMD ["curl","http://localhost"]
