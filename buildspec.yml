@@ -14,7 +14,7 @@ phases:
       - docker run -p 8888:8888 -d $IMAGE_REPO_NAME:$IMAGE_TAG
       - sleep 15s
       - echo "Testing the Docker container on `date`"
-      - curl http://localhost:8888/ > output.html
+      - curl http://localhost:8888
       - TESTING_OUTPUT=$(grep -ci $TESTING_PARAMETER output.html)
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1 ; else echo "Testing SUCCESSFULLY on `date`" ; fi
   post_build:
