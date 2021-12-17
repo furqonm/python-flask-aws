@@ -1,0 +1,84 @@
+<html>
+<head>
+  <title>AWS Training - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="images/favicon.png">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+  <style>.img, .col-lg-7 {margin-left: 17px;} td {padding: 8px;}</style>    
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <img src="images/trainocate.svg" height="40" alt="Trainocate">
+  <div class="collapse navbar-collapse" id="navbarText" style="position: absolute; right: 10;">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://github.com/furqonm">Resource</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://trainocate.com/id" target="_blank">Trainocate</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<br/>
+<h5 style="text-align:center;">
+    Please follow these step to begin {% block training %}{% endblock %}
+</h5>
+<div class="col-lg-10">
+  <hr/>
+  <h5>1. Register your attendance</h5>
+</div>
+<div class="row">
+  <div class="col-lg-3">
+    <p><img src="images/register.jpg" class="img rounded"/></p>
+  </div>
+  <div class="col-lg-7">
+    <p>Please provide your information for the attendance. Feel free to use your personal or business email.</p>
+    <form action="https://docs.google.com/forms/d/e/1FAIpQLSfgwit6Vrij0TSza_y3dBLKRnexqurk6oUAmAWngeK-XDNl4Q/formResponse"
+      target="_blank"
+      id="bootstrapForm"
+      method="POST">
+      <fieldset>
+        <table class="form-group">
+          <tr>
+            <td>Name</td><td><input id="1221414608" placeholder="fulan" class="form-control" type="text" name="entry.1221414608" required /></td>
+            <td>Email</td><td><input id="emailAddress" placeholder="fulan@gmail.com" class="form-control" type="email" name="emailAddress" required /></td>
+          </tr>
+        </table>
+      </fieldset>
+
+      <input type="hidden" name="fvv" value="1">
+      <input type="hidden" name="fbzx" value="-6914561864626509750">
+      <input type="hidden" name="pageHistory" value="0">
+
+      <input type="submit" value="Submit" class="btn btn-warning" role="button" aria-pressed="true" target="_blank">
+    </form>
+  </div>
+</div>
+
+<div class="col-lg-10">
+  <hr/>
+  <h5>2. Access course materials</h5>
+</div>
+<div class="row">
+  <div class="col-lg-3">
+    <p><img src="images/ebook.jpg" class="img rounded"/></p>
+  </div>
+  <div class="col-lg-7" >
+    <p>Modul and hands-on lab guides are provided via Evantage Bookshelf. Please register yourself if you don't have the Evantage account.</p>
+    <p><a href="https://evantage.gilmoreglobal.com" target="_blank" class="btn btn-warning" role="button" aria-pressed="true">Access Evantage</a></p>
+    Notes:
+    <ul>
+      <li>We will send the redeem code at noon (or afternoon).</li>
+      <li>E-books are valid for 2 years. You can't download the document, but you can print it.</li>
+      <li><i>Optional</i> - Download a reader app at <a href="http://vitalsource.com/download" target="_blank">vitalsource.com/download</a></li>
+    </ul>
+  </div>
+</div>
+{% block lab %}{% endblock %}
+</body>
+</html>
