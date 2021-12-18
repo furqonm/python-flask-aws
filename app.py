@@ -11,7 +11,7 @@ def index():
 # Mengambil nama training yang diambil dari System Manager - Parameter Store. Harap buat System Manager - Parameter Store dengan nama parameter yang sama di AWS Console. Buat IAM Role untuk container dengan permission ssm:GetParameter ke Task Role di ECS Task Definition. IAM Policy dengan nama AmazonSSMManagedInstanceCore sudah memiliki permission tersebut.
     training = ssm.get_parameter(Name='/belajaraws/course', WithDecryption=False)
     training = training['Parameter']['Value']
-# Mengecek apakah nama training-nya adalah Cloud Practitioner Essentials. Kalau iya, maka Flask tidak akan menampilkan informasi lab. Hal ini dikarenakan kelas Cloud Practitioner Essentials tidak menyediakan lab.
+# Mengecek apakah nama training CPE atau tidak. Kalau iya, maka Flask tidak akan menampilkan informasi lab. Hal ini dikarenakan kelas CPE tidak menyediakan lab.
     lab = True
     if training == 'Cloud Practitioner Essentials':
       lab = False
