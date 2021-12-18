@@ -31,9 +31,16 @@ phases:
     commands:
       - echo "6. Pushing the Docker image on `date`"
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER
+<<<<<<< HEAD
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+=======
+>>>>>>> f40c1a033a4c973b80905ef5134dd8377a1da84d
       - printf '[{"name":"flask","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
     finally:
       - cat imagedefinitions.json
 artifacts:
+<<<<<<< HEAD
     files: imagedefinitions.json
+=======
+    files: imagedefinitions.json
+>>>>>>> f40c1a033a4c973b80905ef5134dd8377a1da84d
