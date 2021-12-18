@@ -30,7 +30,7 @@ phases:
     commands:
       - echo "6. Pushing the Docker image on `date`"
       - docker push --all-tags $REPOSITORY/$IMAGE
-      - printf '[{"name":$IMAGE,"imageUri":"%s"}]' $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
+      - printf ('[{"name":"%s","imageUri":"%s"}]',$IMAGE,$REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER) > imagedefinitions.json
     finally:
       - cat imagedefinitions.json
 artifacts:
