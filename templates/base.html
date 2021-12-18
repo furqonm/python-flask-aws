@@ -25,7 +25,9 @@
   </div>
 </nav>
 <br/>
-
+<!--
+  Aplikasi akan menampilkan informasi nama training yang diambil dari System Manager - Parameter Store.
+-->
 <h5 style="text-align:center;">
     Please follow these step to begin {% block training %}{% endblock %}
 </h5>
@@ -41,7 +43,7 @@
   <div class="col-lg-7">
     <p>Please provide your information for the attendance. Feel free to use your personal or business email.</p>
 <!--
-  Aplikasi akan mengisikan data yang diberikan pengguna ke Google Forms yang saya sediakan disini. Google Forms berikut Spreadsheets-nya saya sediakan untuk penggunaan publik. Silahkan digunakan bersamaan dengan source code yang saya share, dan mohon jangan mengisikan informasi sensitif diaplikasi ini karena nanti akan terekam didalam Spreadsheets yang bersifat publik. Berikut ini link-nya:
+  Aplikasi akan mengisikan data yang diberikan pengguna ke Google Forms yang saya sediakan disini. Google Forms berikut Spreadsheets-nya saya sediakan untuk akses publik. Silahkan digunakan bersamaan dengan source code yang saya share, dan mohon jangan mengisikan informasi sensitif diaplikasi ini karena data akan terekam didalam Spreadsheets yang bersifat publik. Berikut ini link-nya:
   https://docs.google.com/forms/d/e/1FAIpQLScNdnnBKZdJsS0A26tTjjnDHhtEy30l9LPixGyzQXtBu4vG5Q/viewform
   https://docs.google.com/spreadsheets/d/104BpApQcx7aFtjBz09evsecfu7YgVoKRElQfDgS3cRo/edit?usp=sharing
 
@@ -86,6 +88,9 @@
     </ul>
   </div>
 </div>
+<!--
+  Aplikasi tidak akan menampilkan informasi lab kalau nama trainingnya adalah Cloud Practitioner Essentials.
+-->
 {% if lab == true %}
 <div class="col-lg-10">
   <hr/>
