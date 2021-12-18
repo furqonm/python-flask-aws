@@ -25,6 +25,7 @@ phases:
     finally:
       - docker images
       - docker ps
+      - echo "TESTING_OUTPUT variable is $TESTING_OUTPUT"
   post_build:
     on-failure: ABORT
     commands:
