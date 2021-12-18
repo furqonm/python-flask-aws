@@ -21,10 +21,7 @@ phases:
       - sleep 5s
       - echo "4. Testing started with Docker container..."
       - TESTING_OUTPUT=$(docker exec -i flask_container curl "http://localhost" | grep -ci "$TESTING_PARAMETER")
-      - if [ $TESTING_OUTPUT -eq "0" ];
-      -   then echo "5. Testing FAILED!" && exit 1;
-      -   else echo "5. Testing finished SUCCESSFULLY!";
-      - fi
+      - if [ $TESTING_OUTPUT -eq "0" ]; then echo "5. Testing FAILED!" && exit 1; else echo "5. Testing finished SUCCESSFULLY!"; fi
     finally:
       - docker images
       - docker ps
