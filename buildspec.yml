@@ -1,11 +1,18 @@
 version: 0.2
+env:
+  variables:
+    AWS_DEFAULT_REGION: us-east-1
+    IMAGE_REPO_NAME: python-flask
+    IMAGE_VERSION: 1.1
 
 phases:
   pre_build:
+    on-failure: ABORT
     commands:
       - echo "1. Logging in to Amazon ECR on `date`"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
+    on-failure: ABORT
     commands:
       - echo "2. Building the Docker image on `date`"
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER .
@@ -16,7 +23,16 @@ phases:
       - echo "4. Testing the Docker container on `date`"
       - TESTING_OUTPUT=$(docker exec -i flask_container curl "http://localhost" | grep -ci "$TESTING_PARAMETER")
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1 ; else echo "5. Testing SUCCESSFULLY on `date`" ; fi
+    finally:
+      - docker images
+      - docker ps
   post_build:
+    on-failure: ABORT
     commands:
       - echo "6. Pushing the Docker image on `date`"
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER
+      - printf '[{"name":"flask","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
+    finally:
+      - cat imagedefinitions.json
+artifacts:
+    files: imagedefinitions.json
