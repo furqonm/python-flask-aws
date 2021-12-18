@@ -20,7 +20,7 @@ phases:
       - docker run -p 80:80 --name flask_container -d $REPOSITORY/$IMAGE:latest
       - sleep 5s
       - echo "4. Testing started with Docker container..."
-      - curl "http://localhost:80" --output testing.html
+      - curl "http://0.0.0.0:80" > testing.html
       - export TESTING_OUTPUT=$(grep -ci "$TESTING_PARAMETER" testing.html)
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "5. Testing finished SUCCESSFULLY!"; fi
     finally:
