@@ -12,7 +12,7 @@ phases:
       - echo "1. Logging in to docker registry using Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
   build:
-    on-failure: ABORT
+    on-failure: CONTINUE
     commands:
       - echo "2. Building the Docker image..."
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
@@ -26,7 +26,10 @@ phases:
     finally:
       - docker images
       - docker ps
+      - echo "Testing Parameter is $TESTING_PARAMETER"
+      - grep -ci "$TESTING_PARAMETER" testing.html
       - echo "Output variable is $TESTING_OUTPUT"
+      - cat testing.html
   post_build:
     on-failure: ABORT
     commands:
