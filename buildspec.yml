@@ -9,29 +9,30 @@ phases:
   pre_build:
     on-failure: ABORT
     commands:
-      - echo "1. Logging in to Amazon ECR on `date`"
+      - echo "1. Logging in to docker registry using Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
   build:
     on-failure: ABORT
     commands:
-      - echo "2. Building the Docker image on `date`"
+      - echo "2. Building the Docker image..."
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
-      - echo "3. Execute the Docker image on `date`"
+      - echo "3. Execute the Docker image..."
       - docker run -p 8888:8888 --name flask_container -d $REPOSITORY/$IMAGE:latest
       - sleep 5s
-      - echo "4. Testing the Docker container on `date`"
+      - echo "4. Testing started with Docker container..."
       - TESTING_OUTPUT=$(docker exec -i flask_container curl "http://localhost" | grep -ci "$TESTING_PARAMETER")
-      - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1 ; else echo "5. Testing SUCCESSFULLY on `date`" ; fi
+      - if [ $TESTING_OUTPUT -eq "0" ];
+      -   then echo "5. Testing FAILED!" && exit 1;
+      -   else echo "5. Testing finished SUCCESSFULLY!";
+      - fi
     finally:
       - docker images
       - docker ps
   post_build:
     on-failure: ABORT
     commands:
-      - echo "6. Pushing the Docker image on `date`"
+      - echo "6. Pushing the Docker image to Amazon ECR..."
       - docker push --all-tags $REPOSITORY/$IMAGE
       - printf '[{"name":"%s","imageUri":"%s"}]' $IMAGE $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
-    finally:
-      - cat imagedefinitions.json
 artifacts:
     files: imagedefinitions.json

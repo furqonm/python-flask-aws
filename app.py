@@ -8,9 +8,9 @@ ssm = boto3.client('ssm', region_name="us-east-1")
 def index():
     training = ssm.get_parameter(Name='/belajaraws/course', WithDecryption=False)
     training = training['Parameter']['Value']
-    lab = False
+    lab = True
     if training == 'Cloud Practitioner Essentials':
-      lab = True
+      lab = False
     return render_template('index.html',training=training,lab=lab)
 
 if __name__=="__main__":
