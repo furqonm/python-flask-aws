@@ -18,7 +18,9 @@ phases:
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
       - echo "3. Execute the Docker image..."
       - docker run --name flask_container -id $REPOSITORY/$IMAGE:latest
+      - sleep 5s
       - echo "4. Testing started with Docker container..."
+      - export TESTING_OUTPUT="1"
       - TESTING_OUTPUT=$(docker exec -i flask_container curl "http://localhost" | grep -ci "$TESTING_PARAMETER")
       - if [ $TESTING_OUTPUT -eq "0" ]; then echo "5. Testing FAILED!" && exit 1; else echo "5. Testing finished SUCCESSFULLY!"; fi
     finally:
