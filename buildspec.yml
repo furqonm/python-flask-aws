@@ -1,25 +1,23 @@
 version: 0.2
 env:
   variables:
-    AWS_DEFAULT_REGION: us-east-1
-    IMAGE_REPO_NAME: python-flask
-    IMAGE_VERSION: 1.1
+    IMAGE: python-flask
+    VERSION: 1.1
+    REPOSITORY: 890913392175.dkr.ecr.us-east-1.amazonaws.com
 
 phases:
   pre_build:
     on-failure: ABORT
     commands:
       - echo "1. Logging in to Amazon ECR on `date`"
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
   build:
     on-failure: ABORT
     commands:
       - echo "2. Building the Docker image on `date`"
-      - docker build -t $IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+      - docker build -t $IMAGE_NAME:$VERSION.$CODEBUILD_BUILD_NUMBER -t $IMAGE_NAME:latest .
       - echo "3. Execute the Docker image on `date`"
-      - docker run -p 8888:8888 --name flask_container -d $IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER
+      - docker run -p 8888:8888 --name flask_container -d $IMAGE_NAME:latest
       - sleep 5s
       - echo "4. Testing the Docker container on `date`"
       - TESTING_OUTPUT=$(docker exec -i flask_container curl "http://localhost" | grep -ci "$TESTING_PARAMETER")
@@ -31,9 +29,8 @@ phases:
     on-failure: ABORT
     commands:
       - echo "6. Pushing the Docker image on `date`"
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
-      - printf '[{"name":"flask","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
+      - docker push $REPOSITORY/$IMAGE_NAME --all-tags
+      - printf '[{"name":$IMAGE_NAME,"imageUri":"%s"}]' $REPOSITORY/$IMAGE_NAME:$VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
     finally:
       - cat imagedefinitions.json
 artifacts:
