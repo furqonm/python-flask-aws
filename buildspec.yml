@@ -8,8 +8,6 @@ env:
 phases:
   install:
     on-failure: ABORT
-    runtime-versions:
-      runtime: "python: latest"
     commands:
       - echo "1. Installing runtime and tools..."
       - pip3 install flask
