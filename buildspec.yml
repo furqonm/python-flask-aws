@@ -12,13 +12,12 @@ phases:
       - echo "1. Installing runtime and tools..."
       - pip3 install flask
     finally:
-      - python --version
       - python3 --version
   pre_build:
     on-failure: ABORT
     commands:
       - echo "2. Testing started to application..."
-      - python3 app.py
+      - nohup python3 app.py &
       - curl "http://localhost:80" > output.html
       - export TESTING_OUTPUT=$(grep -ci "$TESTING_PARAMETER" output.html)
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "3. Testing finished SUCCESSFULLY!"; fi
