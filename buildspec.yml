@@ -3,34 +3,47 @@ env:
   variables:
     IMAGE: python-flask
     VERSION: 1.1
-    REPOSITORY: 890913392175.dkr.ecr.us-east-1.amazonaws.com
+    REPOSITORY: 890913392175.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 
 phases:
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      runtime:
+        python: latest
+    commands:
+      - echo "1. Installing runtime and tools..."
+      - pip3 install flask
+    finally:
+      - python --version
+      - python3 --version
   pre_build:
     on-failure: ABORT
     commands:
-      - echo "1. Logging in to docker registry using Amazon ECR..."
+      - echo "2. Testing started to application..."
+      - python3 app.py
+      - curl "http://localhost:80" > output.html
+      - export TESTING_OUTPUT=$(grep -ci "$TESTING_PARAMETER" output.html)
+      - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "3. Testing finished SUCCESSFULLY!"; fi
+      - echo "4. Logging in to docker registry using Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
+    finally:
+      - cat output.html
+      - echo "TESTING_OUTPUT variable is $TESTING_OUTPUT"
   build:
     on-failure: CONTINUE
     commands:
-      - echo "2. Building the Docker image..."
+      - echo "5. Building the Docker image..."
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
-      - echo "3. Execute the Docker image..."
+      - echo "6. Trying to execute the Docker image..."
       - docker run -p 80:80 --name flask_container -id $REPOSITORY/$IMAGE:latest
-      - sleep 5s
-      - echo "4. Testing started with Docker container..."
-      - curl "http://localhost:80"
-      - wget "http://localhost:80"
-      - export TESTING_OUTPUT=$(curl "http://localhost:80" | grep -ci "$TESTING_PARAMETER")
-      - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "5. Testing finished SUCCESSFULLY!"; fi
     finally:
       - docker images
       - docker ps
   post_build:
     on-failure: ABORT
     commands:
-      - echo "6. Pushing the Docker image to Amazon ECR..."
+      - echo "7. Pushing the Docker image to Amazon ECR..."
       - docker push --all-tags $REPOSITORY/$IMAGE
       - printf '[{"name":"%s","imageUri":"%s"}]' $IMAGE $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
 artifacts:
