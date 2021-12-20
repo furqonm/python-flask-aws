@@ -10,12 +10,12 @@ phases:
     on-failure: ABORT
     commands:
       - echo "1. Installing dependency..."
-      - pip3 install flask
+      - pip3 install flask gunicorn
   pre_build:
     on-failure: CONTINUE
     commands:
       - echo "2. Testing started to application..."
-      - nohup python3 app.py &
+      - nohup gunicorn -b 127.0.0.1:80 app:app &
       - curl "http://127.0.0.1:80"
       - export TESTING_OUTPUT=$(curl "http://127.0.0.1:80" | grep -ci "$TESTING_PARAMETER")
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "3. Testing finished SUCCESSFULLY!"; fi
@@ -29,7 +29,7 @@ phases:
       - echo "5. Building the Docker image..."
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
       - echo "6. Trying to execute the Docker image..."
-      - docker run -p 80:80 --name flask_container -id $REPOSITORY/$IMAGE:latest
+      - docker run -p 8080:80 --name flask_container -id $REPOSITORY/$IMAGE:latest
     finally:
       - docker images
       - docker ps
