@@ -9,7 +9,7 @@ phases:
   install:
     on-failure: ABORT
     commands:
-      - echo "1. Installing runtime and tools..."
+      - echo "1. Installing dependency..."
       - pip3 install flask
     finally:
       - python3 --version
@@ -18,7 +18,7 @@ phases:
     commands:
       - echo "2. Testing started to application..."
       - nohup python3 app.py &
-      - curl "http://localhost:80" > output.html
+      - curl "http://127.0.0.1:80" > output.html
       - export TESTING_OUTPUT=$(grep -ci "$TESTING_PARAMETER" output.html)
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "3. Testing finished SUCCESSFULLY!"; fi
       - echo "4. Logging in to docker registry using Amazon ECR..."
