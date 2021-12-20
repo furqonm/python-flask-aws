@@ -12,16 +12,16 @@ phases:
       - echo "1. Installing dependency..."
       - pip3 install flask gunicorn
   pre_build:
-    on-failure: CONTINUE
+    on-failure: ABORT
     commands:
       - echo "2. Testing started to application..."
       - nohup gunicorn -b 127.0.0.1:80 app:app &
-      - curl "http://127.0.0.1:80"
       - export TESTING_OUTPUT=$(curl "http://127.0.0.1:80" | grep -ci "$TESTING_PARAMETER")
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "3. Testing finished SUCCESSFULLY!"; fi
       - echo "4. Logging in to docker registry using Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
     finally:
+      - curl "http://127.0.0.1:80"
       - echo "TESTING_OUTPUT variable is $TESTING_OUTPUT"
   build:
     on-failure: ABORT
@@ -31,7 +31,6 @@ phases:
       - echo "6. Trying to execute the Docker image..."
       - docker run -p 8080:80 --name flask_container -id $REPOSITORY/$IMAGE:latest
     finally:
-      - docker images
       - docker ps
   post_build:
     on-failure: ABORT
