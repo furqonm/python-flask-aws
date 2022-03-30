@@ -16,7 +16,7 @@ phases:
     commands:
       - echo "2. Testing started to application..."
       - nohup gunicorn -b 127.0.0.1:80 app:app &
-      - export TESTING_OUTPUT=$(curl "http://127.0.0.1:80" | grep -ci "$TESTING_PARAMETER")
+      - export TESTING_OUTPUT=$(curl "http://127.0.0.1:80" | grep -ci "DevOps Engineering")
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "3. Testing finished SUCCESSFULLY!"; fi
       - echo "4. Logging in to docker registry using Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
