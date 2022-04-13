@@ -21,7 +21,6 @@ phases:
       - echo "4. Logging in to docker registry using Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
     finally:
-      - curl "http://127.0.0.1:80"
       - echo "TESTING_OUTPUT variable is $TESTING_OUTPUT"
   build:
     on-failure: ABORT
