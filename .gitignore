@@ -1,0 +1,18 @@
+# Configuration
+.git
+buildspec.yml
+appspec.yml
+pom.xml
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/

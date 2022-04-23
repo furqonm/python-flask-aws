@@ -2,8 +2,9 @@ version: 0.2
 env:
   variables:
     IMAGE: python-flask
-    VERSION: 1.1
+    VERSION: 1.0
     REPOSITORY: 890913392175.dkr.ecr.us-east-1.amazonaws.com
+    TESTING_TEXT: "DevOps Engineering"
 
 phases:
   install:
@@ -16,7 +17,7 @@ phases:
     commands:
       - echo "2. Testing started to application..."
       - nohup gunicorn -b 127.0.0.1:80 app:app &
-      - export TESTING_OUTPUT=$(curl "http://127.0.0.1:80" | grep -ci "DevOps Engineering")
+      - export TESTING_OUTPUT=$(curl "http://127.0.0.1:80" | grep -ci $TESTING_TEXT)
       - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "3. Testing finished SUCCESSFULLY!"; fi
       - echo "4. Logging in to docker registry using Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
@@ -27,14 +28,10 @@ phases:
     commands:
       - echo "5. Building the Docker image..."
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
-      - echo "6. Trying to execute the Docker image..."
-      - docker run -p 8080:80 --name flask_container -id $REPOSITORY/$IMAGE:latest
-    finally:
-      - docker ps
   post_build:
     on-failure: ABORT
     commands:
-      - echo "7. Pushing the Docker image to Amazon ECR..."
+      - echo "6. Pushing the Docker image to Amazon ECR..."
       - docker push --all-tags $REPOSITORY/$IMAGE
       - printf '[{"name":"%s","imageUri":"%s"}]' $IMAGE $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
 artifacts:
