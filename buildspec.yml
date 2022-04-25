@@ -22,7 +22,7 @@ phases:
     on-failure: ABORT
     commands:
       - echo "3. Running static code analysis..."
-      - pylint app.py
+      - pylint --fail-under=8 app.py
 
       - echo "4. Building the Docker image..."
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
