@@ -10,29 +10,33 @@ phases:
   install:
     on-failure: ABORT
     commands:
-      - echo "1. Installing dependency..."
-      - pip3 install flask gunicorn
+      - echo "1. Installing the dependencies..."
+      - pip3 install flask gunicorn pylint
   pre_build:
     on-failure: ABORT
     commands:
-      - echo "2. Testing started to application..."
+      - echo "2. Running static code analysis..."
+      - pylint app.py
+
+      - echo "3. Testing the application..."
       - nohup gunicorn -b 127.0.0.1:80 app:app &
       - export TESTING_OUTPUT=$(curl "http://127.0.0.1:80" | grep -ci $TESTING_TEXT)
-      - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "3. Testing finished SUCCESSFULLY!"; fi
-      - echo "4. Logging in to docker registry using Amazon ECR..."
+      - if [ $TESTING_OUTPUT -eq "0" ]; then exit 1; else echo "4. Testing finished SUCCESSFULLY!"; fi
+
+      - echo "5. Signing to Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
-    finally:
-      - echo "TESTING_OUTPUT variable is $TESTING_OUTPUT"
   build:
     on-failure: ABORT
     commands:
-      - echo "5. Building the Docker image..."
+      - echo "6. Building the Docker image..."
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
   post_build:
     on-failure: ABORT
     commands:
-      - echo "6. Pushing the Docker image to Amazon ECR..."
+      - echo "7. Pushing the Docker image to Amazon ECR..."
       - docker push --all-tags $REPOSITORY/$IMAGE
+
+      - echo "8. Generate Docker image information for ECS Task Definition..."
       - printf '[{"name":"%s","imageUri":"%s"}]' $IMAGE $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
 artifacts:
     files: imagedefinitions.json

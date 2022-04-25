@@ -2,7 +2,6 @@
 .git
 buildspec.yml
 appspec.yml
-pom.xml
 README.md
 static/index.png
 
