@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/python:alpine3.15
+FROM public.ecr.aws/bitnami/python:2.7.18
 WORKDIR /project
 ADD . /project
 RUN pip install -r requirements.txt
