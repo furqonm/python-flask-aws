@@ -8,7 +8,6 @@
 </head>
 
 <body>
-<!------------ NAVIGATION ------------>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <img src="static/trainocate.png" height="40" alt="Trainocate">
   <div class="collapse navbar-collapse" id="navbarText" style="position: absolute; right: 10;">
@@ -24,38 +23,28 @@
 </nav>
 
 <br/>
-<!--
-  Aplikasi akan menampilkan informasi nama training yang diambil dari System Manager - Parameter Store.
--->
 <h5 style="text-align:center;">
-    Attention, please follow these steps to begin {% block training %}{% endblock %} class at 11 Mei 2022 in Trainocate Indonesia
+  Assalamu'alaikum, selamat datang dikelas {% block training %}{% endblock %}
 </h5>
 
 <div class="col-lg-10">
   <hr/>
-  <h5>1. Register your attendance</h5>
+  <h5>1. Registrasi sebelum kelas dimulai</h5>
 </div>
 <div class="row">
   <div class="col-lg-3">
     <p><img src="static/register.jpg" class="img rounded"/></p>
   </div>
   <div class="col-lg-7">
-    <p>Please provide your information for the attendance. Feel free to use your personal or business email.</p>
-<!--
-  Aplikasi akan mengisikan data yang diberikan pengguna ke Google Forms yang saya sediakan disini. Google Forms berikut Spreadsheets-nya saya sediakan untuk akses publik. Silahkan digunakan bersamaan dengan source code yang saya share, dan mohon jangan mengisikan informasi sensitif diaplikasi ini karena data akan terekam didalam Spreadsheets yang bersifat publik. Berikut ini link-nya:
-  https://docs.google.com/forms/d/e/1FAIpQLScNdnnBKZdJsS0A26tTjjnDHhtEy30l9LPixGyzQXtBu4vG5Q/viewform
-  https://docs.google.com/spreadsheets/d/104BpApQcx7aFtjBz09evsecfu7YgVoKRElQfDgS3cRo/edit?usp=sharing
-
-  Sedangkan untuk men-generate Google Forms ke HTML menggunakan https://stefano.brilli.me/google-forms-html-exporter/.
--->
-    <form action="https://docs.google.com/forms/d/e/1FAIpQLScNdnnBKZdJsS0A26tTjjnDHhtEy30l9LPixGyzQXtBu4vG5Q/formResponse"
+    <p>Mohon isikan informasi dengan nama dan email. Silahkan gunakan email pribadi atau kantor anda.</p>
+    <form action="https://docs.google.com/forms/d/e/1FAIpQLSfgwit6Vrij0TSza_y3dBLKRnexqurk6oUAmAWngeK-XDNl4Q/formResponse"
       target="_blank"
       id="bootstrapForm"
       method="POST">
       <fieldset>
         <table class="form-group">
           <tr>
-            <td>Name</td><td><input id="1221414608" placeholder="fulan" class="form-control" type="text" name="entry.1221414608" required /></td>
+            <td>Nama</td><td><input id="1221414608" placeholder="fulan" class="form-control" type="text" name="entry.1221414608" required /></td>
             <td>Email</td><td><input id="emailAddress" placeholder="fulan@gmail.com" class="form-control" type="email" name="emailAddress" required /></td>
           </tr>
         </table>
@@ -65,31 +54,30 @@
       <input type="hidden" name="pageHistory" value="0">
       <input type="submit" value="Submit" class="btn btn-warning" role="button" aria-pressed="true" target="_blank">
     </form>
+    Catatan:
+    <ul>
+      <li>Alamat email yang diisi adalah email yang dipakai untuk registrasi akun Amazon.com.</li>
+      <li>Jika belum memiliki akun Amazon.com, maka silahkan daftarkan akun baru anda <a href="https://www.amazon.com/ap/register?openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.com%2F%3F_encoding%3DUTF8%26ref_%3Dnav_newcust&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=usflex&openid.mode=checkid_setup&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&" target="_blank">disini</a></li>
+    </ul>
   </div>
 </div>
-<!--
-  Aplikasi tidak akan menampilkan informasi lab berdasarkan parameter tertentu.
--->
-{% if lab == true %}
+
 <div class="col-lg-10">
   <hr/>
-  <h5>2. Hands-On Labs and Ebooks</h5>
+  <h5>2. Lab dan Ebook</h5>
 </div>
 <div class="row" >
   <div class="col-lg-3">
     <p><img src="static/lab.jpg" class="img rounded"/></p>
   </div>
   <div class="col-lg-7">
-    <p>There are several labs we could explore to grasp how to use AWS services. Before the practice, please register yourself if you don't have a qwikLABS account.</p>
-    <p><a href="https://id-globalknowledge-jp.qwiklabs.com" target="_blank" class="btn btn-warning" role="button" aria-pressed="true">Access qwikLABS</a></p>
-    Notes:
+    <p>Akses AWS Builder Labs untuk mengakses ebook dan beberapa lab. Mohon tunggu beberapa saat karena kami membutuhkan waktu untuk mendaftarkan email anda kedalam sistem AWS</p>
+    <p><a href="{% block link %}{% endblock %}" target="_blank" class="btn btn-warning" role="button" aria-pressed="true">Access AWS Builder Labs</a></p>
+    Catatan:
     <ul>
-      <li>Use your email address in step 1 to create an account.</li>
-      <li>We will inform you when the lab started.</li>
-      <li>You can only start once for each lab.</li>
-    </ul>
+      <li><b>Link AWS Builder Labs harap disimpan</b> atau dibookmark karena link tersebut akan diubah dengan kelas AWS lain yang kami adakan pada sesi berikutnya.</li>
+      <li>Kelas AWS Cloud Practitioner Essential tidak memiliki lab, dimana voucher untuk akses ebook akan kami kirimkan via email.</li>
   </div>
 </div>
-{% endif %}
 </body>
 </html>

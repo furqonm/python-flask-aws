@@ -22,7 +22,7 @@ phases:
     on-failure: ABORT
     commands:
       - echo "3. Running static code analysis..."
-      - pylint --fail-under=7 app.py
+      - pylint --fail-under=6 app.py
 
       - echo "4. Building the Docker image..."
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
@@ -34,5 +34,6 @@ phases:
 
       - echo "6. Generate Docker image information for ECS Task Definition..."
       - printf '[{"name":"%s","imageUri":"%s"}]' $IMAGE $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
+
 artifacts:
     files: imagedefinitions.json
