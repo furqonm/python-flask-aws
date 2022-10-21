@@ -2,7 +2,7 @@ version: 0.2
 env:
   variables:
     IMAGE: eks-ecr
-    VERSION: 1.0
+    VERSION: 1.0.1
     REPOSITORY: 890913392175.dkr.ecr.us-east-1.amazonaws.com
 
 phases:
