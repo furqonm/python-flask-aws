@@ -25,6 +25,7 @@ phases:
     on-failure: ABORT
     commands:
       - echo "2. Signing in to Amazon ECR..."
+      # Docker login command to explicitly pass the repository URL
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
 
   build:
