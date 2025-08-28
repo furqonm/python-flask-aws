@@ -19,13 +19,17 @@ phases:
       python: 3.11
     commands:
       - echo "1. Installing dependencies..."
+      # Install dependencies from requirements.txt first
+      - pip3 install -r requirements.txt
       - pip3 install pylint
 
   pre_build:
     on-failure: ABORT
     commands:
       - echo "2. Signing in to Amazon ECR..."
-      # Docker login command to explicitly pass the repository URL
+      # Adding a debug step to print the REPOSITORY variable to the logs.
+      # This helps confirm that the AWS_ACCOUNT_ID and AWS_DEFAULT_REGION are being populated.
+      - echo "Attempting to log in to repository: $REPOSITORY"
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
 
   build:
