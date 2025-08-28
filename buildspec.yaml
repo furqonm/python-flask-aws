@@ -1,23 +1,32 @@
 version: 0.2
+
 env:
   variables:
     IMAGE: eks-ecr
     VERSION: 1.0
-    REPOSITORY: 890913392175.dkr.ecr.us-east-1.amazonaws.com
+  # The REPOSITORY variable is now constructed dynamically
+  # using built-in CodeBuild environment variables.
+  # AWS_ACCOUNT_ID: The AWS account ID of the build project.
+  # AWS_DEFAULT_REGION: The AWS Region of the build project.
+  REPOSITORY: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
 
 phases:
   install:
     on-failure: ABORT
     runtime-versions:
-      python: 3.x
+      # It's better to specify a major version like 3.11, 3.10, etc.
+      # instead of a generic '3.x'
+      python: 3.11
     commands:
-      - echo "1. Installing additional tool..."
+      - echo "1. Installing dependencies..."
       - pip3 install pylint
+
   pre_build:
     on-failure: ABORT
     commands:
-      - echo "2. Signing to Amazon ECR..."
+      - echo "2. Signing in to Amazon ECR..."
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY
+
   build:
     on-failure: ABORT
     commands:
@@ -26,6 +35,7 @@ phases:
 
       - echo "4. Building the Docker image..."
       - docker build -t $REPOSITORY/$IMAGE:$VERSION.$CODEBUILD_BUILD_NUMBER -t $REPOSITORY/$IMAGE:latest .
+
   post_build:
     on-failure: ABORT
     commands:
