@@ -30,7 +30,7 @@ phases:
       # Adding a debug step to print the REPOSITORY variable to the logs.
       # This helps confirm that the AWS_ACCOUNT_ID and AWS_DEFAULT_REGION are being populated.
       - echo "Attempting to log in to repository"
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REPOSITORY
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 214057697186.dkr.ecr.us-east-1.amazonaws.com
 
   build:
     on-failure: ABORT
