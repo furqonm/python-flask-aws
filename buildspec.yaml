@@ -8,7 +8,7 @@ env:
   # using built-in CodeBuild environment variables.
   # AWS_ACCOUNT_ID: The AWS account ID of the build project.
   # AWS_DEFAULT_REGION: The AWS Region of the build project.
-  REPOSITORY: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+  REPOSITORY: 214057697186.dkr.ecr.us-east-1.amazonaws.com
 
 phases:
   install:
