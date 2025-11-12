@@ -25,7 +25,8 @@ phases:
       - echo "4. Building the Docker image..."
       - docker build -t eks-ecr .
       - docker tag eks-ecr:latest 214057697186.dkr.ecr.us-east-1.amazonaws.com/eks-ecr:latest
-
+      - docker tag eks-ecr:latest 214057697186.dkr.ecr.us-east-1.amazonaws.com/eks-ecr:1.$CODEBUILD_BUILD_NUMBER
+  
   post_build:
     on-failure: ABORT
     commands:
