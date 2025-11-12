@@ -31,7 +31,7 @@ phases:
     on-failure: ABORT
     commands:
       - echo "5. Pushing all Docker tags to Amazon ECR..."
-      - docker push 214057697186.dkr.ecr.us-east-1.amazonaws.com/eks-ecr
+      - docker push --all-tags 214057697186.dkr.ecr.us-east-1.amazonaws.com/eks-ecr
 
       - echo "6. Generate Docker image information for ECS Task Definition..."
       - printf '[{"name":"%s","imageUri":"%s"}]' eks-ecr 214057697186.dkr.ecr.us-east-1.amazonaws.com/eks-ecr:1.$CODEBUILD_BUILD_NUMBER > imagedefinitions.json
