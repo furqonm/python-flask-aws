@@ -10,7 +10,7 @@ ssm = boto3.client('ssm', region_name="us-east-1")
 @app.route('/')
 def index():
     """
-    Mengambil nama training yang diambil dari System Manager-Parameter Store.
+    Mengambil nama training yang diambil dari System Manager-Parameter Store, dengan ketentuan:
     - Jika tidak ada, maka buat dengan nama parameter yang sama di AWS Console.
     - Buat Task Role untuk container dengan permission ssm:GetParameter di ECS Task Definition.
     - IAM Policy dengan nama AmazonSSMManagedInstanceCore sudah memiliki permission tersebut.
